@@ -78,4 +78,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/dockersandbox/front:${{ needs.setup-docker-tag.outputs.docker_tag || 'latest' }}
+          tags: ghcr.io/dockerappsandbox/front:${{ needs.setup-docker-tag.outputs.docker_tag || 'latest' }}
