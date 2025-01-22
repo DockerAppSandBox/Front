@@ -5,6 +5,7 @@ on:
     branches:
       - main
       - develop
+      - fix/pipeline&build&push-image
 
 jobs:
   setup-docker-tag:
@@ -77,4 +78,4 @@ jobs:
         with:
           context: .
           push: true
-          tags: ghcr.io/baptiste-ferrand/dockersandbox:${{ needs.setup-docker-tag.outputs.docker_tag || 'latest' }}
+          tags: ghcr.io/dockersandbox/front:${{ needs.setup-docker-tag.outputs.docker_tag || 'latest' }}
