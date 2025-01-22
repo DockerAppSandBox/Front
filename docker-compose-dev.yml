@@ -1,14 +1,4 @@
 services:
-  mydb:
-    image: postgres
-    ports:
-      - "5432:5432"
-    environment:
-      POSTGRES_USER: ${POSTGRES_USER}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-    networks:
-      mynetwork: 
-        ipv4_address: 172.28.0.4
 
   myapp:
     build:
