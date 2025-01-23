@@ -1,11 +1,11 @@
 import { useForm } from '@mantine/form';
 import { useState } from 'react';
-import { PasswordInput, Group, Button, Box, TextInput, Loader, Text, } from '@mantine/core';
+import { PasswordInput, Group, Button, Box, TextInput, Loader, Text } from '@mantine/core';
 import axiosInstance from '../utils/axiosConfig';
 import { AxiosError } from 'axios';
 import Link from 'next/link';
 
-export default function LogingPage() {
+export default function RegisterPage() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -14,10 +14,18 @@ export default function LogingPage() {
     initialValues: {
       username: '',
       password: '',
+      confirmPassword: '',
     },
+
+    validate: {
+      password: (value) => (value.length < 6 ? 'Le mot de passe doit contenir au moins 6 caractères' : null),
+      confirmPassword: (value, values) =>
+        value !== values.password ? 'Les mots de passe ne correspondent pas' : null,
+    },
+    validateInputOnChange: true, // Validation en temps réel
   });
 
-  const handleSubmit = async (values: { username: string; password: string }) => {
+  const handleSubmit = async (values: { username: string; password: string; confirmPassword: string }) => {
     setLoading(true);
     setError(null);
     setSuccess(null);
@@ -84,12 +92,22 @@ export default function LogingPage() {
           error={form.errors.password}
         />
 
+        <PasswordInput
+          mt="sm"
+          label="Confirm password"
+          placeholder="Confirm password"
+          key={form.key('confirmPassword')}
+          {...form.getInputProps('confirmPassword')}
+          error={form.errors.confirmPassword}
+        />
+
         <Group justify="flex-end" mt="md">
           <Button
             type="submit"
             disabled={
               form.values.username.length == 0 ||
-              form.values.password.length == 0
+              form.values.password.length < 6 ||
+              form.values.password !== form.values.confirmPassword
             }
           >
             Submit
@@ -98,13 +116,13 @@ export default function LogingPage() {
       </form>
 
       <Text mt="md" size="sm" ta="center">
-        Pas de compte ?{' '}
-        <Link href="/register" passHref>
-          Crée en un !!
+        Déjà un compte ?{' '}
+        <Link href="/login" passHref>
+          Connecter vous !!
         </Link>
       </Text>
     </Box>
   );
 }
 
-LogingPage.getLayout = (LogingPage: React.ReactNode) => LogingPage;
+RegisterPage.getLayout = (RegisterPage: React.ReactNode) => RegisterPage;
