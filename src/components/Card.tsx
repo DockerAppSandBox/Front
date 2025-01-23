@@ -1,18 +1,30 @@
-import { Card, Text, Title } from "@mantine/core";
+import { Card, Image, Button, Group } from '@mantine/core';
 
 interface CardItemProps {
-  title: string;
-  description: string;
+  likes: number;
+  dislikes: number;
+  imageUrl: string;
 }
 
-
-export default function CardItem({ title, description }: CardItemProps) {
+export function CardImage({ likes, dislikes, imageUrl }: CardItemProps) {
   return (
     <Card shadow="sm" padding="lg" radius="md" withBorder>
-      <Title order={4}>{title}</Title>
-      <Text size="sm" mt="sm">
-        {description}
-      </Text>
+      <Card.Section>
+        <Image
+          src={imageUrl}
+          height={160}
+          alt="Norway"
+        />
+      </Card.Section>
+
+      <Group justify="center" mt="md">
+        <Button color="green" radius="md">
+          👍 Like ({likes})
+        </Button>
+        <Button color="red" radius="md" ml="sm">
+          👎 Dislike ({dislikes})
+        </Button>
+      </Group>
     </Card>
-  )
+  );
 }
