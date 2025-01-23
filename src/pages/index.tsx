@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import { Welcome } from "../components/Welcome/Welcome";
 import { CardImage } from "../components/Card";
 import { Grid } from "@mantine/core";
 import { useRouter } from 'next/router';
@@ -41,7 +40,6 @@ export default function HomePage() {
 
   return (
     <>
-      <Welcome />
       <Grid>
       {imageData.map((image) => (
           <Grid.Col span={4}>
