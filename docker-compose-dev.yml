@@ -1,5 +1,4 @@
 services:
-
   myapp:
     build:
       context: .
@@ -11,8 +10,6 @@ services:
     - "3000:3000"
     environment:
       - HELLO="hello"
-    depends_on:
-      - mydb
     networks:
       mynetwork:
         ipv4_address: 172.28.0.3
