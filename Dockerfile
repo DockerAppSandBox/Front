@@ -8,6 +8,8 @@ RUN npm ci --frozen-lockfile
 
 COPY . .
 
+RUN npm run lint --if-present
+
 RUN npm run build
 
 RUN rm -rf node_modules src .git .next/cache
