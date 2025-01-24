@@ -9,10 +9,10 @@ services:
     ports:
     - "3000:3000"
     environment:
-      - HELLO="hello"
+      NEXT_PUBLIC_API_URL: ${NEXT_PUBLIC_API_URL}
     networks:
       mynetwork:
-        ipv4_address: 172.28.0.3
+        ipv4_address: 172.28.0.5
 
 networks:
   mynetwork:
