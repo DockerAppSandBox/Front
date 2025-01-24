@@ -1,8 +1,11 @@
-import { useState, useEffect } from "react";
-import { CardImage } from "../components/Card";
-import { Grid } from "@mantine/core";
+'use client';
+import { useEffect, useState } from 'react';
+import { CardImage } from '../components/Card';
+import { Grid, Button, Group } from '@mantine/core';
 import { useRouter } from 'next/router';
 import { useAuth } from '../contexts/AuthContext';
+import { mdiAccount } from '@mdi/js';
+import Icon from '@mdi/react';
 
 interface ImageData {
   id: number;
@@ -12,40 +15,57 @@ interface ImageData {
 }
 
 export default function HomePage() {
-
-    const auth = useAuth();
+  const auth = useAuth();
   const router = useRouter();
-
-  useEffect(() => {
-    if (!auth?.isAuthenticated) {
-      router.push('/login');  // Redirige vers la page de connexion si non connecté
-    }
-  }, [auth, router]);
-
-  // Si l'utilisateur n'est pas encore authentifié, on ne montre rien
-  if (!auth?.isAuthenticated) {
-    return null;
-  }
+  const [loading, setLoading] = useState(true);
   const [imageData, setImageData] = useState<ImageData[]>([]);
 
   useEffect(() => {
-    const fakeData = Array.from({ length: 4 }, (_, index) => ({
+    if (auth?.isAuthenticated) {
+      setLoading(false);
+    } else {
+      router.push('/login');
+    }
+  }, [auth?.isAuthenticated, router]);
+
+  useEffect(() => {
+    const fakeData = Array.from({ length: 34 }, (_, index) => ({
       id: index + 1,
-      url: `https://picsum.photos/400/300?random=${index + 1}`,
+      url: `http://localhost:8000/1.jpeg`,
       likes: Math.floor(Math.random() * 100),
       dislikes: Math.floor(Math.random() * 50),
     }));
     setImageData(fakeData);
   }, []);
 
+  if (loading || auth?.isAuthenticated === false) {
+    return <p>Chargement...</p>;
+  }
+
   return (
     <>
+      {/* Barre de navigation avec le bouton logout */}
+      <Group align="right" style={{ padding: '20px' }}>
+        <Button
+          variant="outline"
+          color="blue"
+          onClick={auth?.logout}
+        >
+          <Icon path={mdiAccount} size={1} />
+          Logout
+        </Button>
+      </Group>
+
       <Grid>
-      {imageData.map((image) => (
-          <Grid.Col span={4}>
-            <CardImage key={image.id} likes={image.likes} dislikes={image.dislikes} imageUrl={image.url} />
-          </Grid.Col >
-      ))}
+        {imageData.map((image) => (
+          <Grid.Col span={4} key={image.id}>
+            <CardImage
+              likes={image.likes}
+              dislikes={image.dislikes}
+              imageUrl={image.url}
+            />
+          </Grid.Col>
+        ))}
       </Grid>
     </>
   );
