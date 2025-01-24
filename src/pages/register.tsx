@@ -12,7 +12,7 @@ export default function RegisterPage() {
 
   const form = useForm({
     initialValues: {
-      username: '',
+      email: '',
       password: '',
       confirmPassword: '',
     },
@@ -25,30 +25,25 @@ export default function RegisterPage() {
     validateInputOnChange: true, // Validation en temps réel
   });
 
-  const handleSubmit = async (values: { username: string; password: string; confirmPassword: string }) => {
+  const handleSubmit = async (values: { email: string; password: string; confirmPassword: string }) => {
     setLoading(true);
     setError(null);
     setSuccess(null);
 
     try {
-      const response = await axiosInstance.post('routes', values);
+      const response = await axiosInstance.post('/auth/register', {
+        email: values.email,
+        password: values.password
+      });
 
       if (response.status === 200) {
         console.log(response.data);
         setSuccess('Session trouvée');
-
-        const fileName: string = 'Anticollision_' + response.data.version + '.exe';
-        try {
-          console.log('Appel à executeExe avec :', fileName);
-          console.log('Exécution réussie :', fileName);
-        } catch (error) {
-          console.error('Erreur lors de l\'exécution du fichier :', error);
-        }
       }
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
         if (error.response?.status === 404) {
-          setError('Mot de passe ou username incorrect');
+          setError('Mot de passe ou email incorrect');
         } else if (error.response?.status === 500) {
           setError('Erreur dans la requête');
         } else {
@@ -78,10 +73,10 @@ export default function RegisterPage() {
 
       <form onSubmit={form.onSubmit(handleSubmit)}>
         <TextInput
-          label="Username"
-          placeholder="Username"
-          key={form.key('username')}
-          {...form.getInputProps('username')}
+          label="Email"
+          placeholder="Email"
+          key={form.key('email')}
+          {...form.getInputProps('email')}
         />
 
         <PasswordInput
@@ -105,7 +100,7 @@ export default function RegisterPage() {
           <Button
             type="submit"
             disabled={
-              form.values.username.length == 0 ||
+              form.values.email.length == 0 ||
               form.values.password.length < 6 ||
               form.values.password !== form.values.confirmPassword
             }

@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 const axiosInstance = axios.create({
-  baseURL: 'https://api.example.com', // Remplacez par votre URL de base
+  baseURL: "http://localhost:8080",
   timeout: 1000,
   headers: {
     'Content-Type': 'application/json',
@@ -11,9 +11,9 @@ const axiosInstance = axios.create({
 // Intercepteur pour ajouter le token à chaque requête
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('authToken'); // Récupérer le token depuis le stockage
+    const token = localStorage.getItem('authToken'); 
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`; // Ajouter le token à l'en-tête Authorization
+      config.headers.Authorization = `Bearer ${token}`; 
     }
     return config;
   },
