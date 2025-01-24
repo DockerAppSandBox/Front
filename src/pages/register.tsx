@@ -4,8 +4,11 @@ import { PasswordInput, Group, Button, Box, TextInput, Loader, Text } from '@man
 import axiosInstance from '../utils/axiosConfig';
 import { AxiosError } from 'axios';
 import Link from 'next/link';
+import Cookies from 'js-cookie';
+import { useRouter } from 'next/router';
 
 export default function RegisterPage() {
+  const router = useRouter();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [success, setSuccess] = useState<string | null>(null);
@@ -22,7 +25,7 @@ export default function RegisterPage() {
       confirmPassword: (value, values) =>
         value !== values.password ? 'Les mots de passe ne correspondent pas' : null,
     },
-    validateInputOnChange: true, // Validation en temps réel
+    validateInputOnChange: true,
   });
 
   const handleSubmit = async (values: { email: string; password: string; confirmPassword: string }) => {
@@ -33,22 +36,25 @@ export default function RegisterPage() {
     try {
       const response = await axiosInstance.post('/auth/register', {
         email: values.email,
-        password: values.password
+        password: values.password,
       });
 
-      if (response.status === 200) {
-        console.log(response.data);
-        setSuccess('Session trouvée');
+      if (response.status === 201) {
+        setSuccess('Utilisateur créé avec succès');
+
+        Cookies.set('authToken', response.data.token, {
+          expires: 7,
+          secure: process.env.NODE_ENV === 'production',
+          sameSite: 'Strict',
+        });
+
+        setTimeout(() => {
+          router.push('/');
+        }, 500); // Permet au cookie de s'enregistrer avant la redirection
       }
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
-        if (error.response?.status === 404) {
-          setError('Mot de passe ou email incorrect');
-        } else if (error.response?.status === 500) {
-          setError('Erreur dans la requête');
-        } else {
-          setError(error.message || 'Une erreur est survenue');
-        }
+        setError(error.response?.data.error || 'Une erreur est survenue');
       }
     } finally {
       setLoading(false);
@@ -72,17 +78,11 @@ export default function RegisterPage() {
       )}
 
       <form onSubmit={form.onSubmit(handleSubmit)}>
-        <TextInput
-          label="Email"
-          placeholder="Email"
-          key={form.key('email')}
-          {...form.getInputProps('email')}
-        />
+        <TextInput label="Email" placeholder="Email" {...form.getInputProps('email')} />
 
         <PasswordInput
           label="Password"
           placeholder="Password"
-          key={form.key('password')}
           {...form.getInputProps('password')}
           error={form.errors.password}
         />
@@ -91,7 +91,6 @@ export default function RegisterPage() {
           mt="sm"
           label="Confirm password"
           placeholder="Confirm password"
-          key={form.key('confirmPassword')}
           {...form.getInputProps('confirmPassword')}
           error={form.errors.confirmPassword}
         />
@@ -99,11 +98,7 @@ export default function RegisterPage() {
         <Group justify="flex-end" mt="md">
           <Button
             type="submit"
-            disabled={
-              form.values.email.length == 0 ||
-              form.values.password.length < 6 ||
-              form.values.password !== form.values.confirmPassword
-            }
+            disabled={form.values.email.length === 0 || form.values.password.length < 6 || form.values.password !== form.values.confirmPassword}
           >
             Submit
           </Button>
@@ -113,7 +108,7 @@ export default function RegisterPage() {
       <Text mt="md" size="sm" ta="center">
         Déjà un compte ?{' '}
         <Link href="/login" passHref>
-          Connecter vous !!
+          Connectez-vous !!
         </Link>
       </Text>
     </Box>
