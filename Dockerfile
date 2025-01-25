@@ -24,6 +24,7 @@ COPY --from=builder /app/package-lock.json package-lock.json
 COPY --from=builder /app/public public
 
 ENV NODE_ENV=production
+ENV NEXT_PUBLIC_API_URL=http://172.28.0.2:8080
 
 RUN npm ci --frozen-lockfile 
 RUN npm cache clean --force
