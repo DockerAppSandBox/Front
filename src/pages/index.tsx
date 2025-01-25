@@ -31,7 +31,7 @@ export default function HomePage() {
   useEffect(() => {
     const fakeData = Array.from({ length: 34 }, (_, index) => ({
       id: index + 1,
-      url: `${process.env.NEXT_PUBLIC_SERVER_PYTHON_URL}/1.png`,
+      url: `http://172.28.0.2:8000/1.png`,
       likes: Math.floor(Math.random() * 100),
       dislikes: Math.floor(Math.random() * 50),
     }));
