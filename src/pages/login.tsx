@@ -102,7 +102,7 @@ export default function LogingPage() {
               form.values.password.length == 0
             }
           >
-            Submit
+            Se connecter
           </Button>
         </Group>
       </form>
@@ -110,7 +110,7 @@ export default function LogingPage() {
       <Text mt="md" size="sm" ta="center">
         Pas de compte ?{' '}
         <Link href="/register" passHref>
-          Crée en un !!
+          En créer un !
         </Link>
       </Text>
     </Box>
