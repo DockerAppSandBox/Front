@@ -47,7 +47,6 @@ export default function LogingPage() {
 
 
     } catch (error: unknown) {
-      console.log(error)
       if (error instanceof AxiosError) {
         if (error.response?.status === 404) {
           setError('Mot de passe ou email incorrect');
