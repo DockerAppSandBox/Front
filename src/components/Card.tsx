@@ -1,5 +1,5 @@
 import { Card, Image, Button, Group } from '@mantine/core';
-import { mdiThumbUpOutline, mdiThumbDownOutline } from '@mdi/js';
+import { mdiThumbUpOutline } from '@mdi/js';
 import Icon from '@mdi/react';
 
 interface CardItemProps {
