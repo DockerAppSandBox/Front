@@ -1,5 +1,4 @@
 import axios from 'axios';
-console.log(process.env.NEXT_PUBLIC_API_URL, "commande d env")
 const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
   timeout: 1000,
@@ -8,31 +7,26 @@ const axiosInstance = axios.create({
   },
 });
 
+const getCookie = (authToken: string) => {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${authToken}=`);
+  if (parts.length === 2) {
+    const lastPart = parts.pop();
+    return lastPart ? lastPart.split(';')[0] : null;
+  }
+  return null;
+};
+
 // Intercepteur pour ajouter le token à chaque requête
 axiosInstance.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('authToken'); 
+    const token = getCookie('authToken'); // Récupération du token depuis les cookies
     if (token) {
-      config.headers.Authorization = `Bearer ${token}`; 
+      config.headers.Authorization = `Bearer ${token}`;
     }
     return config;
   },
   (error) => {
-    return Promise.reject(error);
-  }
-);
-
-// Intercepteur pour gérer les réponses
-axiosInstance.interceptors.response.use(
-  (response) => {
-    return response;
-  },
-  (error) => {
-    if (error.response && error.response.status === 401) {
-      // Gérer les erreurs d'authentification, par exemple, rediriger vers la page de connexion
-      console.error('Non autorisé, redirection vers la page de connexion');
-      window.location.href = '/login'; // Rediriger vers la page de connexion
-    }
     return Promise.reject(error);
   }
 );
