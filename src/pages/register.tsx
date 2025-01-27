@@ -48,9 +48,7 @@ export default function RegisterPage() {
           sameSite: 'Strict',
         });
 
-        setTimeout(() => {
-          router.push('/');
-        }, 500); // Permet au cookie de s'enregistrer avant la redirection
+        router.push('/');
       }
     } catch (error: unknown) {
       if (error instanceof AxiosError) {
@@ -100,7 +98,7 @@ export default function RegisterPage() {
             type="submit"
             disabled={form.values.email.length === 0 || form.values.password.length < 6 || form.values.password !== form.values.confirmPassword}
           >
-            Submit
+            Enregistrer
           </Button>
         </Group>
       </form>

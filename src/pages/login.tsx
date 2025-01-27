@@ -47,7 +47,6 @@ export default function LogingPage() {
 
 
     } catch (error: unknown) {
-      console.log(error)
       if (error instanceof AxiosError) {
         if (error.response?.status === 404) {
           setError('Mot de passe ou email incorrect');
@@ -102,7 +101,7 @@ export default function LogingPage() {
               form.values.password.length == 0
             }
           >
-            Submit
+            Se connecter
           </Button>
         </Group>
       </form>
@@ -110,7 +109,7 @@ export default function LogingPage() {
       <Text mt="md" size="sm" ta="center">
         Pas de compte ?{' '}
         <Link href="/register" passHref>
-          Crée en un !!
+          En créer un !
         </Link>
       </Text>
     </Box>
