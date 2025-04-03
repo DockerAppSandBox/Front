@@ -12,9 +12,9 @@ RUN npm run lint --if-present
 
 ENV NODE_ENV=production
 
-ENV NEXT_PUBLIC_API_URL=http://localhost:8080
+ENV NEXT_PUBLIC_API_URL=http://192.168.0.14:8080
 
-ENV NEXT_PUBLIC_SERVER_PYTHON_URL=http://localhost:8000
+ENV NEXT_PUBLIC_SERVER_PYTHON_URL=http://192.168.0.14:8000
 
 RUN npm run build
 
