@@ -6,7 +6,7 @@
     "postStartCommand": "npm run dev",
     "remoteUser": "node",
     "features": {
-        "ghcr.io/devcontainers/features/docker-in-docker:1": {}
+        "ghcr.io/devcontainers/features/docker-in-docker:2": {}
     },
     "customizations": {
         "vscode": {
